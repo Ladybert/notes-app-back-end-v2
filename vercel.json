@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/notes/(.*)",
+        "dest": "/src/api/notes/$1"
+      }
+    ]
+  }
+  
