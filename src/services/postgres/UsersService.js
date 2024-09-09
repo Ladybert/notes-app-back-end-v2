@@ -26,6 +26,15 @@ class UsersService {
     return result.rows[0].id;
   }
 
+  async getUsersByUsername(username) {
+    const query = {
+      text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1',
+      values: [`%${username}%`],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
   async verifyNewUsername(username) {
     const query = {
       text: 'SELECT username FROM users WHERE username = $1',

@@ -1,4 +1,4 @@
-const AuthenticationsHandler = require('./handler');
+const AuthenticationsHandler = require('./handler.js');
 const routes = require('./routes');
 
 module.exports = {
