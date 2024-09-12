@@ -1,30 +1,35 @@
-require("dotenv").config();
-const Hapi = require("@hapi/hapi");
-const Jwt = require("@hapi/jwt");
+require('dotenv').config();
+const Hapi = require('@hapi/hapi');
+const Jwt = require('@hapi/jwt');
 
 // Notes
-const notes = require("./api/notes");
-const NotesService = require("./services/postgres/NotesService");
-const NotesValidator = require("./validator/notes");
+const notes = require('./api/notes');
+const NotesService = require('./services/postgres/NotesService');
+const NotesValidator = require('./validator/notes');
 
 // Users
-const users = require("./api/users");
-const UsersService = require("./services/postgres/UsersService");
-const UsersValidator = require("./validator/users");
+const users = require('./api/users');
+const UsersService = require('./services/postgres/UsersService');
+const UsersValidator = require('./validator/users');
 
 // authentications
-const authentications = require("./api/authentications");
-const AuthenticationsService = require("./services/postgres/AuthenticationsService");
-const TokenManager = require("./tokenize/TokenManager");
-const AuthenticationsValidator = require("./validator/authentications");
+const authentications = require('./api/authentications');
+const AuthenticationsService = require('./services/postgres/AuthenticationsService');
+const TokenManager = require('./tokenize/TokenManager');
+const AuthenticationsValidator = require('./validator/authentications');
 
 // collaborations
 const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
 
+// Exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
 // ClientError
-const ClientError = require("./exceptions/ClientError");
+const ClientError = require('./exceptions/ClientError');
 
 const init = async () => {
   // Notes, Users, Auth & Collaborations
@@ -37,11 +42,11 @@ const init = async () => {
     port: process.env.PORT,
     host: process.env.HOST,
     debug: {
-      request: ["error"], // tambahkan ini
+      request: ['error'], // tambahkan ini
     },
     routes: {
       cors: {
-        origin: ["*"],
+        origin: ['*'],
       },
     },
   });
@@ -102,16 +107,23 @@ const init = async () => {
         validator: CollaborationsValidator,
       },
     },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        validator: ExportsValidator,
+      },
+    },
   ]);
 
-  server.ext("onPreResponse", (request, h) => {
+  server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
     const { response } = request;
 
     // penanganan client error secara internal.
     if (response instanceof ClientError) {
       const newResponse = h.response({
-        status: "fail",
+        status: 'fail',
         message: response.message,
       });
       newResponse.code(response.statusCode);

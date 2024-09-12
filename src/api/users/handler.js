@@ -1,4 +1,4 @@
-const ClientError = require("../../exceptions/ClientError");
+const ClientError = require('../../exceptions/ClientError');
 
 class UsersHandler {
   constructor(service, validator) {
@@ -29,7 +29,7 @@ class UsersHandler {
         response.code(error.statusCode);
         return response;
       }
- 
+
       // Server ERROR!
       const response = h.response({
         status: 'error',
@@ -52,8 +52,8 @@ class UsersHandler {
     });
 
     const response = h.response({
-      status: "success",
-      message: "User berhasil ditambahkan",
+      status: 'success',
+      message: 'User berhasil ditambahkan',
       data: {
         userId,
       },
@@ -68,7 +68,7 @@ class UsersHandler {
     const user = await this._service.getUserById(id);
 
     return {
-      status: "success",
+      status: 'success',
       data: {
         user,
       },

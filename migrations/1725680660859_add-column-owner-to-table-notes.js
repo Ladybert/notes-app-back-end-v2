@@ -8,11 +8,11 @@
  * @returns {Promise<void> | void}
  */
 exports.up = (pgm) => {
-    pgm.addColumn('notes', {
-        owner: {
-          type: 'VARCHAR(50)',
-        },
-    });
+  pgm.addColumn('notes', {
+    owner: {
+      type: 'VARCHAR(50)',
+    },
+  });
 };
 
 /**
@@ -21,5 +21,5 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-    pgm.dropColumn('notes', 'owner');
+  pgm.dropColumn('notes', 'owner');
 };
